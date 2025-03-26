@@ -5,4 +5,5 @@ import BackendProject.dto.memberdto.JoinMemberDto;
 
 public interface MemberRepository {
     Member save(JoinMemberDto joinMemberDto);
+    Member findByEmail(String email);
 }
