@@ -14,4 +14,13 @@ public class MemberService {
     public Member signUp(Member member) {
         return memberRepository.save(member);
     }
+
+    public Member login(String email, String password) {
+        Member member = memberRepository.findByEmailId(email);
+        if (member.getPassword().equals(password)) {
+            return member;
+        } else {
+            return null;
+        }
+    }
 }

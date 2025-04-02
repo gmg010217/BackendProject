@@ -6,6 +6,6 @@ import java.util.List;
 public interface MemberRepository {
     Member save(Member member);
     Member findById(Long id);
-    Member findByEmail(String email);
+    Member findByEmailId(String email);
     List<Member> findAll();
 }

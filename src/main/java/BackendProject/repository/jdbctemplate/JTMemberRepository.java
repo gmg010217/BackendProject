@@ -54,7 +54,7 @@ public class JTMemberRepository implements MemberRepository {
     }
 
     @Override
-    public Member findByEmail(String email) {
+    public Member findByEmailId(String email) {
         String sql = "select * from member where email_id = :email";
         try {
             Map<String, Object> param = Map.of("email", email);
