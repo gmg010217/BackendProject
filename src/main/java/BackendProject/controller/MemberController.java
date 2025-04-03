@@ -2,6 +2,7 @@ package BackendProject.controller;
 
 import BackendProject.domain.Member;
 import BackendProject.dto.LoginDto;
+import BackendProject.dto.MemberInfoDto;
 import BackendProject.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -45,5 +46,24 @@ public class MemberController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(loginDto);
+    }
+
+    @GetMapping("info/{id}")
+    public ResponseEntity<?> info(@PathVariable Long id) {
+        Member member = memberService.info(id);
+
+        if (member == null) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("존재하지 않는 회원입니다");
+        } else {
+            MemberInfoDto memberInfoDto = new MemberInfoDto();
+            memberInfoDto.setNickname(member.getNickName());
+            memberInfoDto.setEmailId(member.getEmailId());
+
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(memberInfoDto);
+        }
     }
 }

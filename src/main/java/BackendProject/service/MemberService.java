@@ -23,4 +23,13 @@ public class MemberService {
             return null;
         }
     }
+
+    public Member info(Long id) {
+        Member member = memberRepository.findById(id);
+        if (member == null) {
+            return null;
+        } else {
+            return member;
+        }
+    }
 }
