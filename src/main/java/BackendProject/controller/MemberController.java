@@ -31,6 +31,7 @@ public class MemberController {
     @PostMapping("login")
     public ResponseEntity<?> login(@Validated @RequestBody LoginDto loginDto, HttpServletRequest request) {
         Member loginMember = memberService.login(loginDto.getEmailId(), loginDto.getPassword());
+        loginDto.setId(loginMember.getId());
 
         if (loginMember == null) {
             return ResponseEntity
@@ -43,6 +44,6 @@ public class MemberController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body("OK");
+                .body(loginDto);
     }
 }
