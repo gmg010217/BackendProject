@@ -66,4 +66,15 @@ public class MemberController {
                     .body(memberInfoDto);
         }
     }
+
+    @GetMapping("logout")
+    public ResponseEntity<?> logout(HttpServletRequest request) {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("OK");
+    }
 }
