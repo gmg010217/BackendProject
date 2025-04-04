@@ -1,6 +1,7 @@
 package BackendProject.repository.jdbctemplate;
 
 import BackendProject.domain.Member;
+import BackendProject.dto.MemberEditInfoDto;
 import BackendProject.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -70,6 +71,19 @@ public class JTMemberRepository implements MemberRepository {
         try {
            return jdbcTemplate.query(sql, itemRowMapper());
         } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public Member edit(Long id, MemberEditInfoDto member) {
+        String sql = "update member set nick_name = :nickName, age = :age, gender = :gender, about_me = :aboutMe where id = " + id;
+        SqlParameterSource param = new BeanPropertySqlParameterSource(member);
+        int updateMember = jdbcTemplate.update(sql, param);
+
+        if (updateMember == 1) {
+            return findById(id);
+        } else {
             return null;
         }
     }

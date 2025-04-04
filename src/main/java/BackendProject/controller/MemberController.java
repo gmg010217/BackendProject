@@ -2,6 +2,7 @@ package BackendProject.controller;
 
 import BackendProject.domain.Member;
 import BackendProject.dto.LoginDto;
+import BackendProject.dto.MemberEditInfoDto;
 import BackendProject.dto.MemberInfoDto;
 import BackendProject.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -53,17 +54,41 @@ public class MemberController {
         Member member = memberService.info(id);
 
         if (member == null) {
-            return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("존재하지 않는 회원입니다");
+            return noMemberResponseEntity();
         } else {
             MemberInfoDto memberInfoDto = new MemberInfoDto();
-            memberInfoDto.setNickname(member.getNickName());
+            memberInfoDto.setNickName(member.getNickName());
             memberInfoDto.setEmailId(member.getEmailId());
 
             return ResponseEntity
                     .status(HttpStatus.OK)
                     .body(memberInfoDto);
+        }
+    }
+
+    @GetMapping("edit/{id}")
+    public ResponseEntity<?> editInfo(@PathVariable Long id) {
+        MemberEditInfoDto member = memberService.editInfo(id);
+
+        if (member == null) {
+            return noMemberResponseEntity();
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(member);
+        }
+    }
+
+    @PostMapping("edit/{id}")
+    public ResponseEntity<?> edit(@PathVariable Long id, @Validated @RequestBody MemberEditInfoDto memberEditInfoDto) {
+        Member member = memberService.edit(id, memberEditInfoDto);
+
+        if (member == null) {
+            return noMemberResponseEntity();
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("OK");
         }
     }
 
@@ -76,5 +101,11 @@ public class MemberController {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body("OK");
+    }
+
+    private static ResponseEntity<String> noMemberResponseEntity() {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body("존재하지 않는 회원입니다");
     }
 }

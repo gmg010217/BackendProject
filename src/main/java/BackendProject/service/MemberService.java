@@ -1,6 +1,7 @@
 package BackendProject.service;
 
 import BackendProject.domain.Member;
+import BackendProject.dto.MemberEditInfoDto;
 import BackendProject.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,11 +26,22 @@ public class MemberService {
     }
 
     public Member info(Long id) {
+        return memberRepository.findById(id);
+    }
+
+    public MemberEditInfoDto editInfo(Long id) {
         Member member = memberRepository.findById(id);
-        if (member == null) {
-            return null;
-        } else {
-            return member;
-        }
+
+        MemberEditInfoDto memberEditInfoDto = new MemberEditInfoDto();
+        memberEditInfoDto.setNickName(member.getNickName());
+        memberEditInfoDto.setAge(member.getAge());
+        memberEditInfoDto.setGender(member.getGender());
+        memberEditInfoDto.setAboutMe(member.getAboutMe());
+
+        return memberEditInfoDto;
+    }
+
+    public Member edit(Long id, MemberEditInfoDto memberEditInfoDto) {
+        return memberRepository.edit(id, memberEditInfoDto);
     }
 }
