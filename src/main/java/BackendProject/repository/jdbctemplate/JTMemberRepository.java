@@ -3,6 +3,7 @@ package BackendProject.repository.jdbctemplate;
 import BackendProject.domain.Member;
 import BackendProject.dto.MemberEditInfoDto;
 import BackendProject.repository.MemberRepository;
+import BackendProject.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -14,7 +15,6 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -44,13 +44,13 @@ public class JTMemberRepository implements MemberRepository {
         String sql = "select * from member where id = :id";
         try {
             Map<String, Object> param = Map.of("id", id);
-            return jdbcTemplate.queryForObject(sql, param, itemRowMapper());
+            return jdbcTemplate.queryForObject(sql, param, memberRowMapper());
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }
 
-    private RowMapper<Member> itemRowMapper() {
+    private RowMapper<Member> memberRowMapper() {
         return BeanPropertyRowMapper.newInstance(Member.class);
     }
 
@@ -59,17 +59,7 @@ public class JTMemberRepository implements MemberRepository {
         String sql = "select * from member where email_id = :email";
         try {
             Map<String, Object> param = Map.of("email", email);
-            return jdbcTemplate.queryForObject(sql, param, itemRowMapper());
-        } catch (EmptyResultDataAccessException e) {
-            return null;
-        }
-    }
-
-    @Override
-    public List<Member> findAll() {
-        String sql = "select * from member";
-        try {
-           return jdbcTemplate.query(sql, itemRowMapper());
+            return jdbcTemplate.queryForObject(sql, param, memberRowMapper());
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
