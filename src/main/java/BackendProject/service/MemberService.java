@@ -44,4 +44,8 @@ public class MemberService {
     public Member edit(Long id, MemberEditInfoDto memberEditInfoDto) {
         return memberRepository.edit(id, memberEditInfoDto);
     }
+
+    public void delete(Long id) {
+        memberRepository.delete(id);
+    }
 }

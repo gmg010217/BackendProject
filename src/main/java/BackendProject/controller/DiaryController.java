@@ -27,7 +27,7 @@ public class DiaryController {
     }
 
     @PostMapping("{id}")
-    public ResponseEntity<?> diaryAdd(@PathVariable("id") Long memberId,@RequestBody DiaryDto diaryDto) {
+    public ResponseEntity<?> diaryAdd(@PathVariable("id") Long memberId, @RequestBody DiaryDto diaryDto) {
         diaryService.diaryAdd(memberId, diaryDto);
 
         return ResponseEntity
@@ -50,15 +50,15 @@ public class DiaryController {
         }
     }
 
-    @PutMapping("{id}/{diaryId}")
-    public ResponseEntity<?> diaryEdit(@PathVariable("id") Long memberId, @PathVariable("diaryId") Long diaryId, @RequestBody DiaryDto diaryDto) {
+    @PutMapping("{id}/{diaryid}")
+    public ResponseEntity<?> diaryEdit(@PathVariable("id") Long memberId, @PathVariable("diaryid") Long diaryId, @RequestBody DiaryDto diaryDto) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(diaryService.diaryEdit(memberId, diaryId, diaryDto));
     }
 
-    @DeleteMapping("{id}/{diaryId}")
-    public ResponseEntity<?> diaryDelete(@PathVariable("id") Long memberId, @PathVariable("diaryId") Long diaryId) {
+    @DeleteMapping("{id}/{diaryid}")
+    public ResponseEntity<?> diaryDelete(@PathVariable("id") Long memberId, @PathVariable("diaryid") Long diaryId) {
         diaryService.diaryDelete(memberId, diaryId);
 
         return ResponseEntity

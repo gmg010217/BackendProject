@@ -7,6 +7,7 @@ import java.time.LocalDate;
 
 @Data
 public class DiaryDto {
+    private Long id;
     @NotBlank
     private String title;
     @NotBlank

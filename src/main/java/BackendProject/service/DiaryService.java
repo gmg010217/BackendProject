@@ -24,6 +24,7 @@ public class DiaryService {
             diaryDto.setDiaryDate(diary.getDiaryDate());
             diaryDto.setTitle(diary.getTitle());
             diaryDto.setContent(diary.getContent());
+            diaryDto.setId(diary.getId());
             diaryDtos.add(diaryDto);
         }
 

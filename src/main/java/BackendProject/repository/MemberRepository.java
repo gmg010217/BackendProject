@@ -8,4 +8,5 @@ public interface MemberRepository {
     Member findById(Long id);
     Member findByEmailId(String email);
     Member edit(Long id, MemberEditInfoDto member);
+    void delete(Long diaryId);
 }

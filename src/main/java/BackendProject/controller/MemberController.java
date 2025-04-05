@@ -103,6 +103,15 @@ public class MemberController {
                 .body("OK");
     }
 
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> delete(@PathVariable Long id) {
+        memberService.delete(id);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("OK");
+    }
+
     private static ResponseEntity<String> noMemberResponseEntity() {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
