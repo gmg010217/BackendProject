@@ -6,7 +6,6 @@ import lombok.Data;
 
 @Data
 public class Quote {
-    @NotNull
     private Long qday;
     private String content;
 }

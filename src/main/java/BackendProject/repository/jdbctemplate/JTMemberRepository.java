@@ -81,7 +81,7 @@ public class JTMemberRepository implements MemberRepository {
     @Override
     public void delete(Long id) {
         String sql = "delete from member where id = :id";
-         Map<String, Object> param = Map.of("id", id);
+        Map<String, Object> param = Map.of("id", id);
         int update = jdbcTemplate.update(sql, param);
     }
 }
