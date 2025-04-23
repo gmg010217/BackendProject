@@ -74,7 +74,7 @@ public class JTFreeBoardRepository implements FreeBoardRepository {
     @Override
     public List<FreeBoard> findByTitle(String title) {
         String sql = "select * from free_board where title like :title";
-        Map<String, Object> param = Map.of("title", title);
+        Map<String, Object> param = Map.of("title", "%" + title + "%");
         return jdbcTemplate.query(sql, param, freeBoardRowMapper());
     }
 

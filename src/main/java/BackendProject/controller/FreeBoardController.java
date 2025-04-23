@@ -35,6 +35,15 @@ public class FreeBoardController {
                 .body("OK");
     }
 
+    @GetMapping("search")
+    public ResponseEntity<?> searchFreeBoards(@RequestParam("title") String title) {
+        List<GetFreeboardsDto> results = freeBoardService.searchByTitle(title);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(results);
+    }
+
     @GetMapping("{id}/{boardid}")
     public ResponseEntity<?> getFreeboard(@PathVariable("id") Long memberId, @PathVariable("boardid") Long boardId) {
         return null;

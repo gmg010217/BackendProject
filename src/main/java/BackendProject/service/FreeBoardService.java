@@ -49,4 +49,19 @@ public class FreeBoardService {
 
         return freeboardsDtos;
     }
+
+    public List<GetFreeboardsDto> searchByTitle(String title) {
+        List<FreeBoard> freeBoards = freeBoardRepository.findByTitle(title);
+        List<GetFreeboardsDto> result = new ArrayList<>();
+
+        for (FreeBoard freeBoard : freeBoards) {
+            GetFreeboardsDto freeBoardDto = new GetFreeboardsDto();
+            freeBoardDto.setId(freeBoard.getId());
+            freeBoardDto.setTitle(freeBoard.getTitle());
+            freeBoardDto.setCreatDate(freeBoard.getCreatDate());
+            result.add(freeBoardDto);
+        }
+
+        return result;
+    }
 }
