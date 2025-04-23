@@ -1,12 +1,15 @@
 package BackendProject.service;
 
 import BackendProject.domain.FreeBoard;
+import BackendProject.domain.FreeComment;
 import BackendProject.dto.freeboard.AddFreeboardDto;
+import BackendProject.dto.freeboard.GetFreeCommentDto;
+import BackendProject.dto.freeboard.GetFreeboardDto;
 import BackendProject.dto.freeboard.GetFreeboardsDto;
 import BackendProject.repository.FreeBoardRepository;
 import BackendProject.repository.FreeCommentRepository;
+import BackendProject.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +24,7 @@ public class FreeBoardService {
 
     private final FreeBoardRepository freeBoardRepository;
     private final FreeCommentRepository freeCommentRepository;
+    private final MemberRepository memberRepository;
 
     public void addFreeBoard(Long memberId, AddFreeboardDto addFreeboardDto) {
         FreeBoard freeBoard = new FreeBoard();
@@ -67,5 +71,36 @@ public class FreeBoardService {
         }
 
         return result;
+    }
+
+    public GetFreeboardDto getFreeBoard(Long memberId, Long boardId) {
+        FreeBoard freeboard = freeBoardRepository.findById(boardId);
+        GetFreeboardDto freeboardDto = new GetFreeboardDto();
+
+        if (freeboard != null) {
+            freeboardDto.setWriterId(freeboard.getWriterId());
+            freeboardDto.setTitle(freeboard.getTitle());
+            freeboardDto.setContent(freeboard.getContent());
+
+            List<GetFreeCommentDto> comments = new ArrayList<>();
+            for (FreeComment comment : freeCommentRepository.getBoardComment(boardId)) {
+                GetFreeCommentDto commentDto = new GetFreeCommentDto();
+                commentDto.setWriterId(comment.getWriterId());
+                commentDto.setContent(comment.getContent());
+                commentDto.setWriterName(memberRepository.findById(comment.getWriterId()).getNickName());
+                comments.add(commentDto);
+            }
+            freeboardDto.setComments(comments);
+        }
+
+        return freeboardDto;
+    }
+
+    public void addComment(Long memberId, Long boardid, String comment) {
+        FreeComment freeComment = new FreeComment();
+        freeComment.setWriterId(memberId);
+        freeComment.setBoardId(boardid);
+        freeComment.setContent(comment);
+        freeCommentRepository.save(freeComment);
     }
 }

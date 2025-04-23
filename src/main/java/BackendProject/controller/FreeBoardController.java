@@ -1,6 +1,7 @@
 package BackendProject.controller;
 
 import BackendProject.dto.freeboard.AddFreeboardDto;
+import BackendProject.dto.freeboard.GetFreeboardDto;
 import BackendProject.dto.freeboard.GetFreeboardsDto;
 import BackendProject.service.FreeBoardService;
 import lombok.RequiredArgsConstructor;
@@ -46,7 +47,11 @@ public class FreeBoardController {
 
     @GetMapping("{id}/{boardid}")
     public ResponseEntity<?> getFreeboard(@PathVariable("id") Long memberId, @PathVariable("boardid") Long boardId) {
-        return null;
+        GetFreeboardDto getFreeboardDto = freeBoardService.getFreeBoard(memberId, boardId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(getFreeboardDto);
     }
 
     @PostMapping("{id}/{boardid}")
@@ -59,9 +64,13 @@ public class FreeBoardController {
         return null;
     }
 
-    @GetMapping("comment/{id}/{boardid}")
-    public ResponseEntity<?> addComment(@PathVariable("id") Long memberId, @PathVariable("board") Long boardid) {
-        return null;
+    @PostMapping("comment/{id}/{boardid}")
+    public ResponseEntity<?> addComment(@PathVariable("id") Long memberId, @PathVariable("boardid") Long boardid, @RequestBody String comment) {
+        freeBoardService.addComment(memberId, boardid, comment);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("OK");
     }
 
     @DeleteMapping("comment/{id}/{boardid}")
