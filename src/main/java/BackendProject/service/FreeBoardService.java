@@ -52,6 +52,10 @@ public class FreeBoardService {
 
     public List<GetFreeboardsDto> searchByTitle(String title) {
         List<FreeBoard> freeBoards = freeBoardRepository.findByTitle(title);
+        for (FreeBoard freeBoard : freeBoards) {
+            LocalDate date = freeBoardRepository.findCreateDateById(freeBoard.getId());
+            freeBoard.setCreatDate(date);
+        }
         List<GetFreeboardsDto> result = new ArrayList<>();
 
         for (FreeBoard freeBoard : freeBoards) {
