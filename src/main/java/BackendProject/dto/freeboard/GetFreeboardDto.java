@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 public class GetFreeboardDto {
     private Long writerId;
+    private String writerName;
     private String title;
     private String content;
     private List<GetFreeCommentDto> comments = new ArrayList<>();

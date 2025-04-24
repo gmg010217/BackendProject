@@ -81,6 +81,7 @@ public class FreeBoardService {
             freeboardDto.setWriterId(freeboard.getWriterId());
             freeboardDto.setTitle(freeboard.getTitle());
             freeboardDto.setContent(freeboard.getContent());
+            freeboardDto.setWriterName(memberRepository.findById(freeboard.getWriterId()).getNickName());
 
             List<GetFreeCommentDto> comments = new ArrayList<>();
             for (FreeComment comment : freeCommentRepository.getBoardComment(boardId)) {
@@ -102,5 +103,37 @@ public class FreeBoardService {
         freeComment.setBoardId(boardid);
         freeComment.setContent(comment);
         freeCommentRepository.save(freeComment);
+    }
+
+    public String deleteFreeBoard(Long memberId, Long boardId) {
+        FreeBoard freeBoardId = freeBoardRepository.findById(boardId);
+
+        if (memberId.equals(freeBoardId.getWriterId())) {
+            freeBoardRepository.delete(boardId);
+            return "success";
+        } else {
+            return "fail";
+        }
+    }
+
+    public String editFreeBoard(Long memberId, Long boardId, AddFreeboardDto addFreeboardDto) {
+        FreeBoard freeBoardId = freeBoardRepository.findById(boardId);
+        freeBoardId.setTitle(addFreeboardDto.getTitle());
+        freeBoardId.setContent(addFreeboardDto.getContent());
+
+        if (memberId.equals(freeBoardId.getWriterId())) {
+            freeBoardRepository.edit(freeBoardId);
+            return "success";
+        } else {
+            return "fail";
+        }
+    }
+
+    public AddFreeboardDto getEditFreeBoard(Long memberId, Long boardId) {
+        FreeBoard freeBoard = freeBoardRepository.findById(boardId);
+        AddFreeboardDto addFreeboardDto = new AddFreeboardDto();
+        addFreeboardDto.setTitle(freeBoard.getTitle());
+        addFreeboardDto.setContent(freeBoard.getContent());
+        return addFreeboardDto;
     }
 }

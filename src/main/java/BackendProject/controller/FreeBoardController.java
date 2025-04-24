@@ -54,14 +54,43 @@ public class FreeBoardController {
                 .body(getFreeboardDto);
     }
 
-    @PostMapping("{id}/{boardid}")
-    public ResponseEntity<?> editFreeBoard(@PathVariable("id") Long memberId, @PathVariable("boardid") Long boardId) {
-        return null;
+    @GetMapping("edit/{id}/{boardid}")
+    public ResponseEntity<?> getEditFreeBoard(@PathVariable("id") Long memberId, @PathVariable("boardid") Long boardId) {
+        AddFreeboardDto addFreeboardDto = freeBoardService.getEditFreeBoard(memberId, boardId);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(addFreeboardDto);
+    }
+
+    @PostMapping("edit/{id}/{boardid}")
+    public ResponseEntity<?> editFreeBoard(@PathVariable("id") Long memberId, @PathVariable("boardid") Long boardId, @RequestBody AddFreeboardDto addFreeboardDto) {
+        String result = freeBoardService.editFreeBoard(memberId, boardId, addFreeboardDto);
+
+        if (result.equals("fail")) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("수정할 수 없습니다");
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("OK");
+        }
     }
 
     @DeleteMapping("{id}/{boardid}")
     public ResponseEntity<?> deleteFreeBoard(@PathVariable("id") Long memberId, @PathVariable("boardid") Long boardId) {
-        return null;
+        String result = freeBoardService.deleteFreeBoard(memberId, boardId);
+
+        if (result.equals("fail")) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("삭제할 수 없습니다");
+        }
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("OK");
     }
 
     @PostMapping("comment/{id}/{boardid}")
