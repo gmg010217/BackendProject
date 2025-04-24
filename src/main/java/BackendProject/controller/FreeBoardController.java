@@ -1,5 +1,6 @@
 package BackendProject.controller;
 
+import BackendProject.dto.freeboard.AddFreeCommentDto;
 import BackendProject.dto.freeboard.AddFreeboardDto;
 import BackendProject.dto.freeboard.GetFreeboardDto;
 import BackendProject.dto.freeboard.GetFreeboardsDto;
@@ -100,8 +101,8 @@ public class FreeBoardController {
     }
 
     @PostMapping("comment/{id}/{boardid}")
-    public ResponseEntity<?> addComment(@PathVariable("id") Long memberId, @PathVariable("boardid") Long boardid, @RequestBody String comment) {
-        freeBoardService.addComment(memberId, boardid, comment);
+    public ResponseEntity<?> addComment(@PathVariable("id") Long memberId, @PathVariable("boardid") Long boardid, @RequestBody AddFreeCommentDto comment) {
+        freeBoardService.addComment(memberId, boardid, comment.getComment());
 
         return ResponseEntity
                 .status(HttpStatus.OK)

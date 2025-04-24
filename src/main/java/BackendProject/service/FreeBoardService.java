@@ -86,6 +86,7 @@ public class FreeBoardService {
             List<GetFreeCommentDto> comments = new ArrayList<>();
             for (FreeComment comment : freeCommentRepository.getBoardComment(boardId)) {
                 GetFreeCommentDto commentDto = new GetFreeCommentDto();
+                commentDto.setId(comment.getId());
                 commentDto.setWriterId(comment.getWriterId());
                 commentDto.setContent(comment.getContent());
                 commentDto.setWriterName(memberRepository.findById(comment.getWriterId()).getNickName());
