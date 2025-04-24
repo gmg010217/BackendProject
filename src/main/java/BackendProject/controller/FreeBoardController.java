@@ -108,9 +108,9 @@ public class FreeBoardController {
                 .body("OK");
     }
 
-    @DeleteMapping("comment/{id}/{boardid}")
-    public ResponseEntity<?> deleteComment(@PathVariable("id") Long memberId, @PathVariable("board") Long boardid) {
-        String result = freeBoardService.deleteComment(memberId, boardid);
+    @DeleteMapping("comment/{id}/{commentid}")
+    public ResponseEntity<?> deleteComment(@PathVariable("id") Long memberId, @PathVariable("commentid") Long commentId) {
+        String result = freeBoardService.deleteComment(memberId, commentId);
 
         if (result.equals("fail")) {
             return ResponseEntity

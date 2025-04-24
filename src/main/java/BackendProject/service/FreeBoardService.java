@@ -142,11 +142,11 @@ public class FreeBoardService {
         return addFreeboardDto;
     }
 
-    public String deleteComment(Long memberId, Long boardid) {
-        FreeComment freeComment = freeCommentRepository.findById(boardid);
+    public String deleteComment(Long memberId, Long commentId) {
+        FreeComment freeComment = freeCommentRepository.findById(commentId);
 
         if (memberId.equals(freeComment.getWriterId())) {
-            freeCommentRepository.delete(boardid);
+            freeCommentRepository.delete(commentId);
             return "success";
         } else {
             return "fail";
