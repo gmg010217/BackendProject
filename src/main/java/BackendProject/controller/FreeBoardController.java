@@ -58,6 +58,12 @@ public class FreeBoardController {
     public ResponseEntity<?> getEditFreeBoard(@PathVariable("id") Long memberId, @PathVariable("boardid") Long boardId) {
         AddFreeboardDto addFreeboardDto = freeBoardService.getEditFreeBoard(memberId, boardId);
 
+        if (addFreeboardDto == null) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("수정할 수 없습니다");
+        }
+
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(addFreeboardDto);
@@ -104,6 +110,16 @@ public class FreeBoardController {
 
     @DeleteMapping("comment/{id}/{boardid}")
     public ResponseEntity<?> deleteComment(@PathVariable("id") Long memberId, @PathVariable("board") Long boardid) {
-        return null;
+        String result = freeBoardService.deleteComment(memberId, boardid);
+
+        if (result.equals("fail")) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("삭제할 수 없습니다");
+        } else {
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body("OK");
+        }
     }
 }

@@ -131,9 +131,25 @@ public class FreeBoardService {
 
     public AddFreeboardDto getEditFreeBoard(Long memberId, Long boardId) {
         FreeBoard freeBoard = freeBoardRepository.findById(boardId);
+
+        if (freeBoard.getWriterId() != memberId) {
+            return null;
+        }
+
         AddFreeboardDto addFreeboardDto = new AddFreeboardDto();
         addFreeboardDto.setTitle(freeBoard.getTitle());
         addFreeboardDto.setContent(freeBoard.getContent());
         return addFreeboardDto;
+    }
+
+    public String deleteComment(Long memberId, Long boardid) {
+        FreeComment freeComment = freeCommentRepository.findById(boardid);
+
+        if (memberId.equals(freeComment.getWriterId())) {
+            freeCommentRepository.delete(boardid);
+            return "success";
+        } else {
+            return "fail";
+        }
     }
 }
