@@ -116,7 +116,7 @@ public class CounselBoardService {
         }
     }
 
-    public String editFreeBoard(Long memberId, Long boardId, AddCounselboardDto addCounselboardDto) {
+    public String editCounselBoard(Long memberId, Long boardId, AddCounselboardDto addCounselboardDto) {
         CounselBoard counselBoard = counselBoardRepository.findById(boardId);
         counselBoard.setTitle(addCounselboardDto.getTitle());
         counselBoard.setContent(addCounselboardDto.getContent());
