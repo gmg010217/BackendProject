@@ -33,8 +33,8 @@ public class GeminiController {
     }
 
     @PostMapping("{id}")
-    public ResponseEntity<List<ChatMessage>> addGemini(@PathVariable("id") Long memberId, @RequestBody AiChatRequest request) {
-        List<ChatMessage> result = geminiService.addGemini(memberId, request);
+    public ResponseEntity<String> addGemini(@PathVariable("id") Long memberId, @RequestBody AiChatRequest request) {
+        String result = geminiService.addGemini(memberId, request);
 
         if (result != null) {
             return ResponseEntity

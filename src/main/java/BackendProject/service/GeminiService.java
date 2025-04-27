@@ -36,7 +36,7 @@ public class GeminiService {
     @Value("${gemini.api.key}")
     private String geminiApiKey;
 
-    public List<ChatMessage> addGemini(Long memberId, AiChatRequest requestDto) {
+    public String addGemini(Long memberId, AiChatRequest requestDto) {
         ChatMessage userChatMessage = new ChatMessage();
         userChatMessage.setContent(requestDto.getQuestion());
         userChatMessage.setSender("USER");
@@ -63,7 +63,8 @@ public class GeminiService {
         GeminiRequestDto request = new GeminiRequestDto(pass);
         GeminiResponseDto response = restTemplate.postForObject(requestUrl, request, GeminiResponseDto.class);
 
-        String message = response.getCandidates().get(0).getContent().getParts().get(0).getText().toString();
+        String rawText = response.getCandidates().get(0).getContent().getParts().get(0).getText().toString();
+        String message = rawText.replace("*", "");
 
         ChatMessage aiChatMessage = new ChatMessage();
         aiChatMessage.setContent(message);
@@ -71,7 +72,7 @@ public class GeminiService {
         aiChatMessage.setWriterId(memberId);
         geminiRepository.save(aiChatMessage);
 
-        return makeResult(memberId);
+        return message;
     }
 
     public List<ChatMessage> makeResult(Long memberId) {
