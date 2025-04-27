@@ -77,7 +77,7 @@ public class CounselBoardController {
         if (result.equals("fail")) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(result);
+                    .body("수정할 수 없습니다");
         }
 
         return ResponseEntity
