@@ -58,7 +58,6 @@ public class JTExerciseRepository implements ExerciseRepository {
         SqlParameterSource param = new BeanPropertySqlParameterSource(exercise);
         int updateMember = jdbcTemplate.update(sql, param);
 
-        System.out.println("updateMember = " + updateMember);
         if (updateMember == 1) {
             return findByDate(memberId, exercise.getExerciseDate());
         } else {
@@ -72,6 +71,17 @@ public class JTExerciseRepository implements ExerciseRepository {
         try {
             jdbcTemplate.query(sql, exerciseRowMapper());
         } catch (EmptyResultDataAccessException e) {
+        }
+    }
+
+    @Override
+    public List<Exercise> findAll(Long memberId) {
+        String sql = "select * from exercises where member_id = :id";
+        try {
+            Map<String, Object> param = Map.of("id", memberId);
+            return jdbcTemplate.query(sql, param, exerciseRowMapper());
+        } catch (EmptyResultDataAccessException e) {
+            return null;
         }
     }
 

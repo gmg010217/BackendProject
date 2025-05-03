@@ -2,7 +2,9 @@ package BackendProject.controller;
 
 import BackendProject.domain.Exercise;
 import BackendProject.domain.Quote;
+import BackendProject.dto.QuoteAndRecommand;
 import BackendProject.service.ExerciseService;
+import BackendProject.service.GeminiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,19 +18,25 @@ import java.time.LocalDate;
 public class ExerciseController {
 
     private final ExerciseService exerciseService;
+    private final GeminiService geminiService;
 
-    @GetMapping("{dayid}")
-    public ResponseEntity<?> getQuote(@PathVariable("dayid") Long dayId) {
+    @GetMapping("main/{id}/{dayid}")
+    public ResponseEntity<?> getQuote(@PathVariable("id") Long memberId, @PathVariable("dayid") Long dayId) {
         Quote quote = exerciseService.getQuote(dayId);
+        String exerciseRecommand = geminiService.getExerciseRecommand(memberId);
 
         if (quote == null) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body("올바른 날짜를 입력해주세요");
         } else {
+            QuoteAndRecommand quoteAndRecommand = new QuoteAndRecommand();
+            quoteAndRecommand.setContent(quote.getContent());
+            quoteAndRecommand.setRecommand(exerciseRecommand);
+
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(quote);
+                    .body(quoteAndRecommand);
         }
     }
 
