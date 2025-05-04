@@ -2,6 +2,7 @@ package BackendProject.controller;
 
 import BackendProject.domain.Exercise;
 import BackendProject.domain.Quote;
+import BackendProject.dto.ExerciseCountDto;
 import BackendProject.dto.QuoteAndRecommand;
 import BackendProject.service.ExerciseService;
 import BackendProject.service.GeminiService;
@@ -49,14 +50,35 @@ public class ExerciseController {
                 .body("OK");
     }
 
+    @GetMapping("first/{id}")
+    public ResponseEntity<?> isFirstExercise(@PathVariable("id") Long memberId) {
+        Long count = exerciseService.isFirstExercise(memberId);
+
+        ExerciseCountDto exerciseCountDto = new ExerciseCountDto();
+        exerciseCountDto.setCount(count);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(exerciseCountDto);
+    }
+
+    @GetMapping("first/{id}/{date}")
+    public ResponseEntity<?> getFirstExercise(@PathVariable("id") Long memberId, @PathVariable("date") LocalDate date) {
+        Exercise exercise = geminiService.getFirstExercise(memberId, date);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(exercise);
+    }
+
     @GetMapping("{id}/{date}")
     public ResponseEntity<?> getExercise(@PathVariable("id") Long memberId, @PathVariable("date") LocalDate date) {
         Exercise exercise = exerciseService.getExercise(memberId, date);
 
         if (exercise == null) {
             return ResponseEntity
-                    .status(HttpStatus.BAD_REQUEST)
-                    .body("OK");
+                    .status(HttpStatus.OK)
+                    .body(new Exercise());
         } else {
             return ResponseEntity
                     .status(HttpStatus.OK)

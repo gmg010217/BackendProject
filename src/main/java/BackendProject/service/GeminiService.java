@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -103,5 +104,42 @@ public class GeminiService {
         String message = rawText.replace("*", "");
 
         return message;
+    }
+
+    public Exercise getFirstExercise(Long memberId, LocalDate date) {
+        String requestUrl = apiUrl + "?key=" + geminiApiKey;
+        List<Exercise> exercises = exerciseRepository.findAll(memberId);
+
+        if (exercises.isEmpty()) {
+            return null;
+        }
+
+        String pass = "";
+
+        for (Exercise exercise : exercises) {
+            pass += "내가 쓴 운동 제목은 \""
+                    + exercise.getTitle() + "\"이고. 운동 내용은 \""
+                    + exercise.getContent() + "\"이야.";
+        }
+
+        pass += "여기까지가 나의 운동 기록이고 내가 작성한 운동 기록과 동일한 운동으로 \"운동 제목\"과 \"운동 내용\"만 하나씩 작성해줘 " +
+                "(단 운동 제목과 운동 내용 문구는 작성하지 말고 운동 제목과 운동 내용을 &로 구분해서 작성해줘";
+
+        GeminiRequestDto request = new GeminiRequestDto(pass);
+        GeminiResponseDto response = restTemplate.postForObject(requestUrl, request, GeminiResponseDto.class);
+
+        String rawText = response.getCandidates().get(0).getContent().getParts().get(0).getText().toString();
+        String message = rawText.replace("*", "");
+
+        String[] split = message.split("&");
+
+        Exercise exercise = new Exercise();
+        exercise.setTitle(split[0]);
+        exercise.setContent(split[1]);
+        exercise.setMemberId(memberId);
+        exercise.setExerciseDate(date);
+        Exercise savedExercises = exerciseRepository.save(exercise);
+
+        return savedExercises;
     }
 }

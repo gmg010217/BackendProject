@@ -36,6 +36,7 @@ public class JTExerciseRepository implements ExerciseRepository {
         SqlParameterSource param = new BeanPropertySqlParameterSource(exercise);
         Number key = jdbcInsert.executeAndReturnKey(param);
         exercise.setId(key.longValue());
+        System.out.println("exercise = " + exercise);
         return exercise;
     }
 

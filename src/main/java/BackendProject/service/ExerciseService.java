@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -31,5 +32,10 @@ public class ExerciseService {
 
     public void editExercises(Long memberId, LocalDate date, Exercise exercise) {
         exerciseRepository.edit(memberId, date, exercise);
+    }
+
+    public Long isFirstExercise(Long memberId) {
+        List<Exercise> exercises = exerciseRepository.findAll(memberId);
+        return Long.valueOf(exercises.size());
     }
 }
