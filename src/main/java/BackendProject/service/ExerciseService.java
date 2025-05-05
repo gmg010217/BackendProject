@@ -17,8 +17,8 @@ public class ExerciseService {
     private final ExerciseRepository exerciseRepository;
     private final QuoteRepository quoteRepository;
 
-    public Quote getQuote(Long memberId) {
-        return quoteRepository.findBy(memberId);
+    public Quote getQuote(Long dayId) {
+        return quoteRepository.findBy(dayId);
     }
 
     public void addExercise(Long memberId, Exercise exercise) {

@@ -25,16 +25,24 @@ public class JTQuoteRepository implements QuoteRepository {
 
     @Override
     public Quote findBy(Long quoteId) {
+        System.out.println("quoteId = " + quoteId);
         String sql = "select * from quotes where qday = :qday";
         try {
-            Map<String, Object> params = Map.of("qday", quoteId);
-            return jdbcTemplate.queryForObject(sql, params, quoteRowMapper());
+            Map<String, Object> params = Map.of("qday", quoteId.intValue());
+            Quote quote = jdbcTemplate.queryForObject(sql, params, quoteRowMapper());
+            return quote;
         } catch (EmptyResultDataAccessException e) {
+            System.out.println("no..");
             return null;
         }
     }
 
     private RowMapper<Quote> quoteRowMapper() {
-        return BeanPropertyRowMapper.newInstance(Quote.class);
+        return (rs, rowNum) -> {
+            Quote q = new Quote();
+            q.setQday(rs.getInt("qday"));
+            q.setContent(rs.getString("content"));
+            return q;
+        };
     }
 }
