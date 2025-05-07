@@ -22,7 +22,7 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins(
                         "http://10.0.2.2:8080",
-                        "http://192.168.0.50:8080"
+                        "http://192.168.45.244:8080"
                 )
                 .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                 .allowCredentials(true);

@@ -7,10 +7,13 @@ import BackendProject.domain.Member;
 import BackendProject.dto.AiChatRequest;
 import BackendProject.dto.GeminiRequestDto;
 import BackendProject.dto.GeminiResponseDto;
+import BackendProject.dto.QuizListDto;
 import BackendProject.repository.DiaryRepository;
 import BackendProject.repository.ExerciseRepository;
 import BackendProject.repository.GeminiRepository;
 import BackendProject.repository.MemberRepository;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -141,5 +144,51 @@ public class GeminiService {
         Exercise savedExercises = exerciseRepository.save(exercise);
 
         return savedExercises;
+    }
+
+    public List<QuizListDto> getQuiz(Long memberId) {
+
+        String requestUrl = apiUrl + "?key=" + geminiApiKey;
+        Member member = memberRepository.findById(memberId);
+        String pass = "안녕 내 닉네임은 " + member.getNickName() + "이고 나이는"
+                + member.getAge() + "살이야. 성별은"
+                + member.getGender() + "이고. 나를 간략히 소개하자면 나는 \""
+                + member.getAboutMe() + "\"라고 할 수 있어.";
+
+        List<Diary> diarys = diaryRepository.findAll(memberId);
+
+        for (Diary diary : diarys) {
+            pass += "내가 쓴 일기 제목은 \""
+                    + diary.getTitle() + "\"이고. 일기 내용은 \""
+                    + diary.getContent() + "\"이야.";
+        }
+
+        List<Exercise> exercises = exerciseRepository.findAll(memberId);
+
+        for (Exercise exercise : exercises) {
+            pass += "내가 쓴 운동 제목은 \""
+                    + exercise.getTitle() + "\"이고. 운동 내용은 \""
+                    + exercise.getContent() + "\"이야.";
+        }
+
+        pass += "여기까지가 나의 소개이고 \"건강 관련 퀴즈\"를 사지선다 객관식으로 10개 내줘" +
+                "단 \"question\": \"1+1=?\", \"options\": [\"1\", \"2\", \"3\"], \"answer\": \"2\" 형식으로 작성해 (JSON 데이터 이외의 문구는 작성하지 말고)";
+
+        GeminiRequestDto request = new GeminiRequestDto(pass);
+        GeminiResponseDto response = restTemplate.postForObject(requestUrl, request, GeminiResponseDto.class);
+
+        String rawText = response.getCandidates().get(0).getContent().getParts().get(0).getText().toString();
+        String message = rawText.replace("*", "")
+                .replace("```json", "")
+                .replace("```", "");
+
+        try {
+            ObjectMapper objectMapper = new ObjectMapper();
+            List<QuizListDto> quizList = objectMapper.readValue(message, new TypeReference<List<QuizListDto>>() {});
+            return quizList;
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException("퀴즈 JSON 파싱 실패", e);
+        }
     }
 }
