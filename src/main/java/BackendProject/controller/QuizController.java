@@ -15,7 +15,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/healthmind/quiz/")
 @RequiredArgsConstructor
-@Slf4j
 public class QuizController {
 
     private final GeminiService geminiService;
@@ -23,11 +22,17 @@ public class QuizController {
 
     @GetMapping("{id}")
     public ResponseEntity<?> getQuiz(@PathVariable("id") Long memberId) {
-        List<QuizListDto> quizzes = geminiService.getQuiz(memberId);
+        try {
+            List<QuizListDto> quizzes = geminiService.getQuiz(memberId);
 
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .body(quizzes);
+            return ResponseEntity
+                    .status(HttpStatus.OK)
+                    .body(quizzes);
+        } catch (IllegalStateException e) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .body("오늘 이미 퀴즈를 풀었습니다.");
+        }
     }
 
     @PostMapping("save/{id}")

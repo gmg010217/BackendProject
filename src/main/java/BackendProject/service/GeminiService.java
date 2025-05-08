@@ -8,10 +8,7 @@ import BackendProject.dto.AiChatRequest;
 import BackendProject.dto.GeminiRequestDto;
 import BackendProject.dto.GeminiResponseDto;
 import BackendProject.dto.QuizListDto;
-import BackendProject.repository.DiaryRepository;
-import BackendProject.repository.ExerciseRepository;
-import BackendProject.repository.GeminiRepository;
-import BackendProject.repository.MemberRepository;
+import BackendProject.repository.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +29,7 @@ public class GeminiService {
     private final MemberRepository memberRepository;
     private final DiaryRepository diaryRepository;
     private final ExerciseRepository exerciseRepository;
+    private final QuizRepository quizRepository;
 
     @Qualifier("geminiRestTemplate")
     @Autowired
@@ -147,6 +145,10 @@ public class GeminiService {
     }
 
     public List<QuizListDto> getQuiz(Long memberId) {
+
+        if (quizRepository.existsByMemberIdAndDate(memberId, LocalDate.now())) {
+            throw new IllegalStateException("오늘은 이미 퀴즈를 진행했습니다");
+        }
 
         String requestUrl = apiUrl + "?key=" + geminiApiKey;
         Member member = memberRepository.findById(memberId);
