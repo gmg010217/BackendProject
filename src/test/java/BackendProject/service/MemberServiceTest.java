@@ -112,7 +112,7 @@ class MemberServiceTest {
 
     @Test
     @DisplayName("회원정보수정_성공")
-    void edit() {
+    void editSuccess() {
         // given
         MemberEditInfoDto memberEditInfoDto = new MemberEditInfoDto();
         memberEditInfoDto.setNickName("수정된 유저");

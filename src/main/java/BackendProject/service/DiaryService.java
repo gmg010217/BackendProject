@@ -31,16 +31,21 @@ public class DiaryService {
         return diaryDtos;
     }
 
-    public void diaryAdd(Long memberId, DiaryDto diaryDto) {
+    public Diary diaryAdd(Long memberId, DiaryDto diaryDto) {
         Diary diary = new Diary();
         diary.setMemberId(memberId);
         diary.setTitle(diaryDto.getTitle());
         diary.setContent(diaryDto.getContent());
-        diaryRepository.save(diary);
+        return diaryRepository.save(diary);
     }
 
     public DiaryDto diaryDetail(Long memberId, Long diaryId) {
         Diary diary = diaryRepository.findById(memberId, diaryId);
+
+        if (diary == null) {
+            return null;
+        }
+
         DiaryDto diaryDto = new DiaryDto();
         diaryDto.setDiaryDate(diary.getDiaryDate());
         diaryDto.setTitle(diary.getTitle());
