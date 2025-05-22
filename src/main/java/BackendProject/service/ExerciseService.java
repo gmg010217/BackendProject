@@ -21,21 +21,25 @@ public class ExerciseService {
         return quoteRepository.findBy(dayId);
     }
 
-    public void addExercise(Long memberId, Exercise exercise) {
+    public Exercise addExercise(Long memberId, Exercise exercise) {
         exercise.setMemberId(memberId);
-        exerciseRepository.save(exercise);
+        return exerciseRepository.save(exercise);
     }
 
     public Exercise getExercise(Long memberId, LocalDate date) {
         return exerciseRepository.findByDate(memberId, date);
     }
 
-    public void editExercises(Long memberId, LocalDate date, Exercise exercise) {
-        exerciseRepository.edit(memberId, date, exercise);
+    public Exercise editExercises(Long memberId, LocalDate date, Exercise exercise) {
+        return exerciseRepository.edit(memberId, date, exercise);
     }
 
     public Long isFirstExercise(Long memberId) {
         List<Exercise> exercises = exerciseRepository.findAll(memberId);
         return Long.valueOf(exercises.size());
+    }
+
+    public void deleteExercise(Long memberId, LocalDate date) {
+        exerciseRepository.delete(memberId, date);
     }
 }

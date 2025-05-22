@@ -145,8 +145,4 @@ class MemberServiceTest {
         // then
         assertThat(updatedMember).isNull();
     }
-
-    @Test
-    void delete() {
-    }
 }

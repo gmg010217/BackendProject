@@ -36,7 +36,6 @@ public class JTExerciseRepository implements ExerciseRepository {
         SqlParameterSource param = new BeanPropertySqlParameterSource(exercise);
         Number key = jdbcInsert.executeAndReturnKey(param);
         exercise.setId(key.longValue());
-        System.out.println("exercise = " + exercise);
         return exercise;
     }
 
@@ -68,11 +67,9 @@ public class JTExerciseRepository implements ExerciseRepository {
 
     @Override
     public void delete(Long memberId, LocalDate exerciseDate) {
-        String sql = "select * from exercises";
-        try {
-            jdbcTemplate.query(sql, exerciseRowMapper());
-        } catch (EmptyResultDataAccessException e) {
-        }
+        String sql = "delete from exercises where member_id = :id AND exercise_date = :date";
+        Map<String, Object> param = Map.of("id", memberId, "date", exerciseDate);
+        jdbcTemplate.update(sql, param);
     }
 
     @Override
