@@ -26,12 +26,12 @@ public class CounselBoardService {
     private final CounselCommentRepository counselCommentRepository;
     private final MemberRepository memberRepository;
 
-    public void addCounselBoard(Long memberId, AddCounselboardDto addCounselboardDto) {
+    public CounselBoard addCounselBoard(Long memberId, AddCounselboardDto addCounselboardDto) {
         CounselBoard counselBoard = new CounselBoard();
         counselBoard.setWriterId(memberId);
         counselBoard.setTitle(addCounselboardDto.getTitle());
         counselBoard.setContent(addCounselboardDto.getContent());
-        counselBoardRepository.save(counselBoard);
+        return counselBoardRepository.save(counselBoard);
     }
 
     public List<GetCounselboardsDto> getCounselBoards() {
@@ -74,9 +74,9 @@ public class CounselBoardService {
 
     public GetCounselboardDto getCounselBoard(Long memberId, Long boardId) {
         CounselBoard counselBoard = counselBoardRepository.findById(boardId);
-        GetCounselboardDto counselboardDto = new GetCounselboardDto();
 
         if (counselBoard != null) {
+            GetCounselboardDto counselboardDto = new GetCounselboardDto();
             counselboardDto.setWriterId(counselBoard.getWriterId());
             counselboardDto.setTitle(counselBoard.getTitle());
             counselboardDto.setContent(counselBoard.getContent());
@@ -92,17 +92,19 @@ public class CounselBoardService {
                 comments.add(commentDto);
             }
             counselboardDto.setComments(comments);
+
+            return counselboardDto;
         }
 
-        return counselboardDto;
+        return null;
     }
 
-    public void addComment(Long memberId, Long boardId, String comment) {
+    public CounselComment addComment(Long memberId, Long boardId, String comment) {
         CounselComment counselComment = new CounselComment();
         counselComment.setWriterId(memberId);
         counselComment.setBoardId(boardId);
         counselComment.setContent(comment);
-        counselCommentRepository.save(counselComment);
+        return counselCommentRepository.save(counselComment);
     }
 
     public String deleteCounselBoard(Long memberId, Long boardId) {
@@ -132,7 +134,7 @@ public class CounselBoardService {
     public AddCounselboardDto getEditCounselBoard(Long memberId, Long boardId) {
         CounselBoard counselBoard = counselBoardRepository.findById(boardId);
 
-        if (counselBoard.getWriterId() != memberId) {
+        if (!counselBoard.getWriterId().equals(memberId)) {
             return null;
         }
 
