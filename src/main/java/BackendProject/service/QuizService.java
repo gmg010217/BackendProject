@@ -11,8 +11,8 @@ public class QuizService {
 
     private final QuizRepository quizRepository;
 
-    public void saveQuiz(Long memberId, Quiz quiz) {
+    public Quiz saveQuiz(Long memberId, Quiz quiz) {
         quiz.setMemberId(memberId);
-        quizRepository.save(quiz);
+        return quizRepository.save(quiz);
     }
 }
