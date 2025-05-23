@@ -15,5 +15,5 @@ spring:
 
 gemini:
   api:
-    url: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=AIzaSyBv8op1xH3HLRORTtMP_nbX31mJBHhy4Ak
+    url: https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent
     key: AIzaSyBv8op1xH3HLRORTtMP_nbX31mJBHhy4Ak
