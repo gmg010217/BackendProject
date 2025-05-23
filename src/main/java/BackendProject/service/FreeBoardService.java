@@ -26,12 +26,12 @@ public class FreeBoardService {
     private final FreeCommentRepository freeCommentRepository;
     private final MemberRepository memberRepository;
 
-    public void addFreeBoard(Long memberId, AddFreeboardDto addFreeboardDto) {
+    public FreeBoard addFreeBoard(Long memberId, AddFreeboardDto addFreeboardDto) {
         FreeBoard freeBoard = new FreeBoard();
         freeBoard.setWriterId(memberId);
         freeBoard.setTitle(addFreeboardDto.getTitle());
         freeBoard.setContent(addFreeboardDto.getContent());
-        freeBoardRepository.save(freeBoard);
+        return freeBoardRepository.save(freeBoard);
     }
 
     public List<GetFreeboardsDto> getFreeBoards() {
@@ -75,9 +75,9 @@ public class FreeBoardService {
 
     public GetFreeboardDto getFreeBoard(Long memberId, Long boardId) {
         FreeBoard freeboard = freeBoardRepository.findById(boardId);
-        GetFreeboardDto freeboardDto = new GetFreeboardDto();
 
         if (freeboard != null) {
+            GetFreeboardDto freeboardDto = new GetFreeboardDto();
             freeboardDto.setWriterId(freeboard.getWriterId());
             freeboardDto.setTitle(freeboard.getTitle());
             freeboardDto.setContent(freeboard.getContent());
@@ -93,17 +93,19 @@ public class FreeBoardService {
                 comments.add(commentDto);
             }
             freeboardDto.setComments(comments);
+
+            return freeboardDto;
         }
 
-        return freeboardDto;
+        return null;
     }
 
-    public void addComment(Long memberId, Long boardid, String comment) {
+    public FreeComment addComment(Long memberId, Long boardid, String comment) {
         FreeComment freeComment = new FreeComment();
         freeComment.setWriterId(memberId);
         freeComment.setBoardId(boardid);
         freeComment.setContent(comment);
-        freeCommentRepository.save(freeComment);
+        return freeCommentRepository.save(freeComment);
     }
 
     public String deleteFreeBoard(Long memberId, Long boardId) {
@@ -133,7 +135,7 @@ public class FreeBoardService {
     public AddFreeboardDto getEditFreeBoard(Long memberId, Long boardId) {
         FreeBoard freeBoard = freeBoardRepository.findById(boardId);
 
-        if (freeBoard.getWriterId() != memberId) {
+        if (!freeBoard.getWriterId().equals(memberId)) {
             return null;
         }
 
